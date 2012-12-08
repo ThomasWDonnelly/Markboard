@@ -51,6 +51,7 @@ class markboardCopyFormattedCommand(sublime_plugin.TextCommand):
                 normalString = normalString.encode("utf-8")
                 f.write(normalString + "\n\n")
                 passedSelections += 1
+                f.close()
 
         if singleCursors > 0 and passedSelections < 1:
             theBuffer = self.view.substr(sublime.Region(0, self.view.size()))
@@ -58,6 +59,7 @@ class markboardCopyFormattedCommand(sublime_plugin.TextCommand):
             f = open(self.globalWriter, "a")
             normalString = normalString.encode("utf-8")
             f.write(normalString + "\n\n")
+            f.close()
 
         newThread = MarkboardMarkdownProcessor(self.globalWriter) if not pandoc else MarkboardPandocMarkdownProcessor(self.globalWriter, self.view.window(), env)
         threads.append(newThread)
@@ -148,3 +150,4 @@ class MarkboardPandocMarkdownProcessor(threading.Thread):
         else:
             f = open(outFile)
             self.result = f.read()
+            f.close()
