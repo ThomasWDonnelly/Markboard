@@ -1,0 +1,20 @@
+# Markboard for Sublime Text 2
+Markboard is a quick-and-dirty plugin for [Sublime Text 2](http://sublimetext.com) that processes your Markdown document and copies the result to the clipboard as rich text. Its genesis lies in the author's side-by-side resistances to writing e-mails in Mail.app and to sending unformatted messages. With Markboard, it's delightfully simple to write a whole e-mail in Sublime---better, in Markdown in Sublime!---and then copy the formatted result to an e-mail message. Those locked into WYSIWYG word processors for some of their work may also find this handy.
+
+The package essentially bridges and combines a few readymade Python libraries and scripts without adding too much, so please take a look at the "Thanks and Credits" section below.
+
+
+## Usage
+Just press `Ctrl+Alt+c` in any Markdown document, switch to a rich-text editor, and paste. You can also select specific parts of your Markdown source for processing; if there are multiple selections, they'll be strung together with two newlines between them and copied as a unit.
+
+
+## Limitations
+Markboard has only been tested on Mac OS X---Windows and Linux users are encouraged to give it a try and report their results! The Windows code is recent, and seems reliable; the Linux code was written, without a Linux distro and in the dark, by your intrepid author, who is a humanities weenie by trade and unaccustomed to software design. Your mileage and so on.
+
+
+## Thanks and Credits
+Markboard isn't too much more than an amalgamation of several other predesigned scripts:
+
+* [Trent Mick's markdown2 Python library](https://github.com/trentm/python-markdown2), to parse the Markdown source and return HTML; in the project folder, with license and documentation, as `markdown2.py`.
+* [Phillip Piper's Windows clipboard library](http://code.activestate.com/recipes/474121-getting-html-from-the-windows-clipboard/), to place the HTML on the Windows clipboard; distributed without a license and in the project folder as `winClip.py`.
+* ["Clark"'s guide to manipulating the OS X clipboard](http://www.libertypages.com/clarktech/?p=3299) provided the basis for the way this script does it.
