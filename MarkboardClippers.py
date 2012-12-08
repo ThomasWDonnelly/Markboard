@@ -15,6 +15,7 @@ except ImportError:
 
 class OSXClipObject(object):
     def __init__(self, theData):
+        theData = theData.decode("utf-8")
         pasteboard = NSPasteboard.generalPasteboard()
         typeArray = NSArray.arrayWithObject_(NSHTMLPboardType)
         pasteboard.declareTypes_owner_(typeArray, None)
@@ -23,11 +24,13 @@ class OSXClipObject(object):
 
 class WinClipObject(object):
     def __init__(self, theData):
+        theData = theData.decode("utf-8")
         winClip.putHTML(theData)
 
 
 class LinuxClipObject(object):
     def __init__(self, theData):
+        theData = theData.decode("utf-8")
         clip = gtk.Clipboard()
         clip.set_can_store(None)
         target = "text/html"

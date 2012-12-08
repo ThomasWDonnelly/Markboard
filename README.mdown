@@ -8,6 +8,10 @@ The package essentially bridges and combines a few readymade Python libraries an
 Just press `Ctrl+Alt+c` in any Markdown document, switch to a rich-text editor, and paste. You can also select specific parts of your Markdown source for processing; if there are multiple selections, they'll be strung together with two newlines between them and copied as a unit.
 
 
+## Optional Configuration
+The `Markboard.sublime-settings` file includes the option to run your Markdown through [Pandoc](http://johnmacfarlane.net/pandoc/) rather than Trent Mick's `markdown2` library. A little testing revealed that Pandoc's Markdown processor is considerably smoother, but not necessarily such a dramatic improvement as to justify dropping `markdown2` and rendering the package unusable to those without a Pandoc installation.
+
+
 ## Limitations
 Markboard has only been tested on Mac OS X---Windows and Linux users are encouraged to give it a try and report their results! The Windows code is recent, and seems reliable; the Linux code was written, without a Linux distro and in the dark, by your intrepid author, who is a humanities weenie by trade and unaccustomed to software design. Your mileage and so on.
 

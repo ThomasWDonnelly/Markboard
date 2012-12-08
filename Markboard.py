@@ -1,12 +1,13 @@
+import os
+import tempfile
 import threading
+import subprocess
 import sublime
 import sublime_plugin
 import markdown2
 import MarkboardClippers
 
 '''
-    
-
     OS X docs: http://www.libertypages.com/clarktech/?p=3299
     Windows docs: http://code.activestate.com/recipes/474121-getting-html-from-the-windows-clipboard/
     Linux docs: http://www.pygtk.org/docs/pygtk/class-gtkclipboard.html#method-gtkclipboard--store
@@ -30,6 +31,13 @@ class markboardCopyFormattedCommand(sublime_plugin.TextCommand):
         selections = self.view.sel()
         threads = []
 
+        pandoc = sublime.load_settings("Markboard.sublime-settings").get("use_pandoc", False)
+        env = os.environ.copy()
+        env['PATH'] = env['PATH'] + ":" + sublime.load_settings("Markboard.sublime-settings").get("pandoc_path", "/usr/local/bin")
+
+        f = tempfile.NamedTemporaryFile(mode="w+", suffix=".mdown", delete=False)
+        self.globalWriter = f.name
+        f.close()
         self.runningThreadBuffer = ""
 
         singleCursors = passedSelections = 0
@@ -39,17 +47,21 @@ class markboardCopyFormattedCommand(sublime_plugin.TextCommand):
                 singleCursors += 1
             else:
                 normalString = self.normalize_line_endings(theSubstring)
-                newThread = MarkboardMarkdownProcessor(normalString)
-                threads.append(newThread)
-                newThread.start()
+                f = open(self.globalWriter, "a")
+                normalString = normalString.encode("utf-8")
+                f.write(normalString + "\n\n")
                 passedSelections += 1
 
         if singleCursors > 0 and passedSelections < 1:
             theBuffer = self.view.substr(sublime.Region(0, self.view.size()))
             normalString = self.normalize_line_endings(theBuffer)
-            newThread = MarkboardMarkdownProcessor(normalString)
-            threads.append(newThread)
-            newThread.start()
+            f = open(self.globalWriter, "a")
+            normalString = normalString.encode("utf-8")
+            f.write(normalString + "\n\n")
+
+        newThread = MarkboardMarkdownProcessor(self.globalWriter) if not pandoc else MarkboardPandocMarkdownProcessor(self.globalWriter, self.view.window(), env)
+        threads.append(newThread)
+        newThread.start()
 
         self.manageThreads(threads)
 
@@ -85,7 +97,6 @@ class markboardCopyFormattedCommand(sublime_plugin.TextCommand):
             sublime.status_message("Fatal error formatting text.")
 
     def normalize_line_endings(self, string):
-        string = string.replace('\n', '\n\n')
         string = string.replace('\r\n', '\n').replace('\r', '\n')
         line_endings = self.view.settings().get('default_line_ending')
         if line_endings == 'windows':
@@ -105,12 +116,35 @@ class markboardCopyFormattedCommand(sublime_plugin.TextCommand):
 
 
 class MarkboardMarkdownProcessor(threading.Thread):
-    def __init__(self, theMarkdown):
-        self.myMarkdown = theMarkdown
+    def __init__(self, theFilename):
+        self.myFilename = theFilename
         self.result = None
         threading.Thread.__init__(self)
 
     def run(self):
-        extras = ["fenced-code-blocks", "footnotes",
-                    "header-ids", "smarty-pants"]
-        self.result = markdown2.markdown(self.myMarkdown, extras=extras)
+        extras = ["fenced-code-blocks", "footnotes", "smarty-pants"]
+        self.result = markdown2.markdown_path(self.myFilename, extras=extras)
+
+
+class MarkboardPandocMarkdownProcessor(threading.Thread):
+    def __init__(self, theFilename, theWindow, env):
+        self.myFilename = theFilename
+        self.result = None
+        self.window = theWindow
+        self.env = env
+        threading.Thread.__init__(self)
+
+    def run(self):
+        f = tempfile.NamedTemporaryFile(mode="w+", suffix=".html", delete=False)
+        # f.write("\n")
+        outFile = f.name
+        f.close()
+        cmd = ['pandoc', self.myFilename, '--output=%s' % outFile, '--from=markdown', '--to=html', '--smart', '--normalize']
+        try:
+            subprocess.call(cmd, env=self.env)
+        except Exception as e:
+            err("Exception: " + str(e))
+            self.result = False
+        else:
+            f = open(outFile)
+            self.result = f.read()
