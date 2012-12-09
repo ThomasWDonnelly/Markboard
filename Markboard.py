@@ -26,6 +26,10 @@ class markboardCopyFormattedCommand(sublime_plugin.TextCommand):
         Renders the contents of the buffer in Markdown and copies
         the formatted text to the clipboard.
     """
+    def is_enabled(self):
+        multimarkdown = self.view.score_selector(0, "text.html.multimarkdown") > 0
+        markdown = self.view.score_selector(0, "text.html.markdown") > 0
+        return multimarkdown or markdown
 
     def run(self, edit):
         selections = self.view.sel()
