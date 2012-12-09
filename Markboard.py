@@ -73,7 +73,7 @@ class markboardCopyFormattedCommand(sublime_plugin.TextCommand):
             f.write(normalString + "\n\n")
             f.close()
 
-        newThread = MarkboardMarkdownProcessor(writer) if not pandoc else MarkboardPandocMarkdownProcessor(self.globalWriter, self.view.window(), env)
+        newThread = MarkboardMarkdownProcessor(writer) if not pandoc else MarkboardPandocMarkdownProcessor(writer, self.view.window(), env)
         threads.append(newThread)
         newThread.start()
 
