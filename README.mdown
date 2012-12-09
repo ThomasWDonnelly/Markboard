@@ -1,7 +1,7 @@
 # Markboard for Sublime Text 2
-Markboard is a quick-and-dirty plugin for [Sublime Text 2](http://sublimetext.com) that processes your Markdown document and copies the result to the clipboard as rich text. Its genesis lies in the author's side-by-side resistances to writing e-mails in Mail.app and to sending unformatted messages. With Markboard, it's delightfully simple to write a whole e-mail in Sublime---better, in Markdown in Sublime!---and then copy the formatted result to an e-mail message. Those locked into WYSIWYG word processors for some of their work may also find this handy.
+Markboard is a quick-and-dirty plugin for [Sublime Text 2](http://sublimetext.com) that processes a Markdown document and copies the output to the clipboard as rich text. Its target audience is that Venn slice of people whom both WYSIWYG editors and completely raw text cause to twitch, who enjoy the expressive force of an emphasized word but also the austerity of a monospaced buffer, who would sooner part with their typing fingers than their typesetting systems but compromise their staunchness each and every time they want to italicize a book title in an e-mail. To these people, Markboard is proudly dedicated. Go forth and WYG no more.
 
-The package essentially bridges and combines a few readymade Python libraries and scripts without adding too much, so please take a look at the "Thanks and Credits" section below.
+The package essentially bridges and combines a few readymade Python libraries and scripts without adding much more than a Sublime interface, so please take a look at the "Thanks and Credits" section below.
 
 
 ## Usage
@@ -9,7 +9,7 @@ Just press `Ctrl+Alt+c` in any Markdown document, switch to a rich-text editor, 
 
 
 ## Optional Configuration
-The `Markboard.sublime-settings` file includes the option to run your Markdown through [Pandoc](http://johnmacfarlane.net/pandoc/) rather than Trent Mick's `markdown2` library. A little testing revealed that Pandoc's Markdown processor is considerably smoother, but not necessarily such a dramatic improvement as to justify dropping `markdown2` and rendering the package unusable to those without a Pandoc installation.
+The `Markboard.sublime-settings` file includes the option to run your Markdown through [Pandoc](http://johnmacfarlane.net/pandoc/) rather than [Trent Mick's `markdown2` library](https://github.com/trentm/python-markdown2). A little testing revealed that Pandoc's Markdown processor is considerably smoother, but not necessarily such a dramatic improvement as to justify dropping `markdown2` and rendering the package unusable to those without a Pandoc installation; so it's left to the user. (Though of course, installing Pandoc also means being able to take full advantage of Markboard's sister plugin, [Pandown](http://sublime.daniel.sh/pandown/).)
 
 
 ## Limitations
@@ -19,6 +19,8 @@ Markboard has only been tested on Mac OS X---Windows and Linux users are encoura
 ## Thanks and Credits
 Markboard isn't too much more than an amalgamation of several other predesigned scripts:
 
-* [Trent Mick's markdown2 Python library](https://github.com/trentm/python-markdown2), to parse the Markdown source and return HTML; in the project folder, with license and documentation, as `markdown2.py`.
+* [Trent Mick's markdown2 Python library](https://github.com/trentm/python-markdown2), to parse the Markdown source and return HTML; in the project folder, with MIT license and documentation, as `markdown2.py`.
 * [Phillip Piper's Windows clipboard library](http://code.activestate.com/recipes/474121-getting-html-from-the-windows-clipboard/), to place the HTML on the Windows clipboard; distributed without a license and in the project folder as `winClip.py`.
 * ["Clark"'s guide to manipulating the OS X clipboard](http://www.libertypages.com/clarktech/?p=3299) provided the basis for the way this script does it.
+
+My heartfelt gratitude goes out to the authors of these components. If they should come across this project and think that their work was being misused, I'd encourage them to contact me through GitHub or at <d@daniel.sh>.
